@@ -24,7 +24,7 @@ class Listener(commands.Cog):
 
         create_button.callback = create_button_callback
 
-        view = discord.ui.View()
+        view = discord.ui.View(timeout=None)
         view.add_item(create_button)
 
         await ticket_channel.purge(limit=1)
@@ -36,13 +36,12 @@ class Listener(commands.Cog):
         role = member.guild.get_role(self.bot.config.community_role_id)
 
         embed = discord.Embed(color=self.bot.config.main_color)
-        embed.description = f'Welcome {member.mention} to {member.guild.name}!'
+        embed.description = f'<a:purpleheart:1233379992348659756> Welcome to {member.guild.name}! <a:purpleheart:1233379992348659756>'
         embed.add_field(name='Rules', value='<#1233170863897968700>', inline=False)
         embed.add_field(name='General', value='<#1125326451944738850>', inline=False)
         embed.add_field(name='User since', value=discord.utils.format_dt(member.created_at, 'R'), inline=False)
         embed.set_thumbnail(url=member.avatar.url)
-        embed.set_footer(text=member.display_name, icon_url=member.avatar.url)
-        embed.timestamp = datetime.now()
+        embed.set_author(name=member.display_name, icon_url=member.avatar.url)
 
         await member.add_roles(role)
         await welcome_channel.send(embed=embed)

@@ -23,7 +23,7 @@ async def setup_ticket_system(bot: Qolga, interaction: discord.Interaction):
     welcome_embed.set_footer(text=f'ავტორი {interaction.user.display_name}', icon_url=interaction.user.avatar.url)
     welcome_embed.timestamp = datetime.now()
     
-    view = ui.View()
+    view = ui.View(timeout=None)
     close_button = ui.Button(label='დახურვა', style=discord.ButtonStyle.secondary, emoji='🔒')
 
     async def close_button_callback(inter: discord.Interaction):
@@ -39,7 +39,7 @@ async def setup_ticket_system(bot: Qolga, interaction: discord.Interaction):
         confirm_close.callback = _confirm_close_callback
         cancel_close.callback = cancel_close_callback
 
-        inner_view = ui.View()
+        inner_view = ui.View(timeout=None)
         inner_view.add_item(confirm_close)
         inner_view.add_item(cancel_close)
         
@@ -81,7 +81,7 @@ async def confirm_close_callback(bot: Qolga, inter: discord.Interaction, interac
     reopen_button.callback = reopen_button_callback
     delete_button.callback = delete_button_callback
 
-    view = ui.View()
+    view = ui.View(timeout=None)
     view.add_item(reopen_button)
     view.add_item(delete_button)
 

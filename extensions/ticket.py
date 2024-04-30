@@ -15,7 +15,7 @@ class Ticket(commands.Cog):
 
     @ticket_group.command(name='open', description='თიქეთის გახსნა')
     async def ticket_open(self, interaction: discord.Interaction):
-        await interaction.response.send_message('ტურნირი ჯერ არ არის დაწყებული', ephemeral=True)
+        await interaction.response.send_message('ჯერ ტურნირი არ არის დაწყებული', ephemeral=True)
         # await self.setup_ticket_system(interaction)
 
     @commands.command(name='ticket_setup')
@@ -34,7 +34,7 @@ class Ticket(commands.Cog):
 
         create_button.callback = create_button_callback
 
-        view = ui.View()
+        view = ui.View(timeout=None)
         view.add_item(create_button)
 
         await ticket_channel.send(embed=embed, view=view)
