@@ -16,7 +16,7 @@ extensions = (
 
 class Qolga(commands.Bot):
     def __init__(self):
-        self.dev = True
+        self.dev = False
         self.config = Config(self.dev)
         super().__init__(
             command_prefix='!',
