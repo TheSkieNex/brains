@@ -3,6 +3,7 @@ from discord.ext import commands
 
 from utils.bot import Qolga
 from utils.ticket import setup_ticket_system
+from datetime import datetime
 
 class Listener(commands.Cog):
     def __init__(self, bot: Qolga):
@@ -40,6 +41,8 @@ class Listener(commands.Cog):
         embed.add_field(name='General', value='<#1125326451944738850>', inline=False)
         embed.add_field(name='User since', value=discord.utils.format_dt(member.created_at, 'R'), inline=False)
         embed.set_thumbnail(url=member.avatar.url)
+        embed.set_footer(text=member.display_name, icon_url=member.avatar.url)
+        embed.timestamp = datetime.now()
 
         await member.add_roles(role)
         await welcome_channel.send(embed=embed)
