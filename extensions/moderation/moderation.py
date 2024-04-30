@@ -20,12 +20,15 @@ class Moderation(commands.Cog):
         if not reason:
             reason = 'არ იყო მითითებული'
 
-        embed = discord.Embed()
-        embed.description = f'**მიზეზი**: {reason}'
-        embed.set_author(name=f'{target.name} გავარდა სერვერდიან', icon_url=target.avatar.url)
+        try:
+            embed = discord.Embed()
+            embed.description = f'**მიზეზი**: {reason}'
+            embed.set_author(name=f'{target.name} გავარდა სერვერდიან', icon_url=target.avatar.url)
 
-        await interaction.guild.kick(target, reason=reason)
-        await interaction.response.send_message(embed=embed)
+            await interaction.guild.kick(target, reason=reason)
+            await interaction.response.send_message(embed=embed)
+        except discord.Forbidden:
+            await interaction.response.send_message('მე არ მაქვს უფლება მოთხოვნა შევასრულო', ephemeral=True)
 
     @app_commands.command(name='ban', description='უკრძალავს წევრს სერვერზე ყოფნას')
     @app_commands.guild_only()
@@ -38,13 +41,12 @@ class Moderation(commands.Cog):
         if not reason:
             reason = 'არ იყო მითითებული'
 
-        embed = discord.Embed()
-        embed.description = f'**მიზეზი**: {reason}'
-        embed.set_author(name=f'{target.name} აეკრძალა სერვერზე ყოფნა', icon_url=target.avatar.url)
+        try:
+            embed = discord.Embed()
+            embed.description = f'**მიზეზი**: {reason}'
+            embed.set_author(name=f'{target.name} აეკრძალა სერვერზე ყოფნა', icon_url=target.avatar.url)
 
-        await interaction.guild.ban(target, reason=reason)
-        await interaction.response.send_message(embed=embed)
-
-
-async def setup(bot: Qolga):
-    await bot.add_cog(Moderation(bot))
+            await interaction.guild.ban(target, reason=reason)
+            await interaction.response.send_message(embed=embed)
+        except discord.Forbidden:
+            await interaction.response.send_message('მე არ მაქვს უფლება მოთხოვნა შევასრულო', ephemeral=True)

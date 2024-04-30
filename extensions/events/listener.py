@@ -43,7 +43,3 @@ class Listener(commands.Cog):
 
         await member.add_roles(role)
         await welcome_channel.send(embed=embed)
-
-
-async def setup(bot: Qolga):
-    await bot.add_cog(Listener(bot))
