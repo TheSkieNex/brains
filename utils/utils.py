@@ -1,0 +1,1 @@
+ICON_URL = 'https://media.discordapp.net/attachments/1233175018695954472/1233412396224090205/Icon.png?ex=663397ce&is=6632464e&hm=56f50f3c5cc74d1da94400171f90833b9ccf28e701aed2b4b4b415fb6bcc0a4c&=&format=webp&quality=lossless&width=607&height=607'

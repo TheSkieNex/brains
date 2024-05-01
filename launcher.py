@@ -7,7 +7,7 @@ from utils.bot import Qolga
 
 load_dotenv()
 
-DEV = False
+DEV = os.getenv('DEV_STATE')
 token = os.getenv('TEST_BOT_TOKEN') if DEV else os.getenv('BOT_TOKEN')
 
 async def run_bot():

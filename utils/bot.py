@@ -1,4 +1,6 @@
+import os
 import logging
+
 import discord
 
 from discord.ext import commands
@@ -16,7 +18,7 @@ extensions = (
 
 class Qolga(commands.Bot):
     def __init__(self):
-        self.dev = False
+        self.dev = os.getenv('DEV_STATE')
         self.config = Config(self.dev)
         super().__init__(
             command_prefix='!',
