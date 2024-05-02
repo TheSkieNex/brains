@@ -14,6 +14,7 @@ extensions = (
     'extensions.events',
     'extensions.moderation',
     'extensions.ticket',
+    'extensions.information',
 )
 
 class Qolga(commands.Bot):
