@@ -12,3 +12,4 @@ class Config:
         self.guild_id = 1070804318485233766 if self.dev else 1125326451944738847
 
         self.owner_user_id = 530689295699148800
+        self.organizer_role_id = 1070804523100143717 if self.dev else 1233168847968927744

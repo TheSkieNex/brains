@@ -1,5 +1,6 @@
 import os
 import logging
+import aiosqlite
 
 import discord
 
@@ -15,14 +16,17 @@ extensions = (
     'extensions.moderation',
     'extensions.ticket',
     'extensions.information',
+    'extensions.tag',
 )
 
 class Qolga(commands.Bot):
+    db: aiosqlite.Cursor
+    db_conn: aiosqlite.Connection
     def __init__(self):
         self.dev = os.getenv('DEV_STATE')
         self.config = Config(self.dev)
         super().__init__(
-            command_prefix='!',
+            command_prefix='?',
             status=discord.Status.online,
             intents=discord.Intents.all(),
         )

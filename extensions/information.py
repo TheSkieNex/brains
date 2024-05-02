@@ -55,7 +55,7 @@ class Information(commands.Cog):
 
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name='user', description='მომხმარებლის ინფორმაცია')
+    @app_commands.command(name='user', description='წევრის ინფორმაცია')
     @app_commands.guild_only()
     async def user_info(self, interaction: discord.Interaction, member: discord.Member = None):
         if not member:

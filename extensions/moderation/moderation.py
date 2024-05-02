@@ -9,7 +9,7 @@ class Moderation(commands.Cog):
     def __init__(self, bot: Qolga):
         self.bot = bot
 
-    @app_commands.command(name='kick', description='აგდებს წევრს სერვერიდან')
+    @app_commands.command(name='kick', description='წევრის სერვერიდან გაგდება')
     @app_commands.guild_only()
     @app_commands.default_permissions(kick_members=True)
     @app_commands.describe(
@@ -30,7 +30,7 @@ class Moderation(commands.Cog):
         except discord.Forbidden:
             await interaction.response.send_message('მე არ მაქვს უფლება მოთხოვნა შევასრულო', ephemeral=True)
 
-    @app_commands.command(name='ban', description='უკრძალავს წევრს სერვერზე ყოფნას')
+    @app_commands.command(name='ban', description='წევრის სერვერზე ყოფნის აკრძალვა')
     @app_commands.guild_only()
     @app_commands.default_permissions(ban_members=True)
     @app_commands.describe(

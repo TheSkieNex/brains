@@ -42,7 +42,7 @@ class Listener(commands.Cog):
         embed.description = f'<a:purpleheart:1233379992348659756> Welcome to {member.guild.name}! <a:purpleheart:1233379992348659756>'
         embed.add_field(name='Rules', value='<#1233170863897968700>', inline=False)
         embed.add_field(name='General', value='<#1125326451944738850>', inline=False)
-        embed.add_field(name='User since', value=discord.utils.format_dt(member.created_at, 'R'), inline=False)
+        embed.add_field(name='Created', value=discord.utils.format_dt(member.created_at, 'R'), inline=False)
         embed.set_thumbnail(url=member.avatar.url if member.avatar else ICON_URL)
         embed.set_author(name=member.display_name, icon_url=member.avatar.url if member.avatar else None)
         embed.timestamp = datetime.now()
