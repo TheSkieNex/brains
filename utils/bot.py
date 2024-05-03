@@ -19,9 +19,31 @@ extensions = (
     'extensions.tag',
 )
 
+class BotDB:
+    def __init__(self, db: aiosqlite.Cursor, db_conn: aiosqlite.Connection):
+        self.db = db
+        self.db_conn = db_conn
+
+    async def execute(self, query: str, *parameters, commit: bool = True):
+        exc = await self.db.execute(query, parameters if parameters else ())
+        if commit:
+            await self.db_conn.commit()
+            return exc
+    
+    async def commit(self):
+        await self.db_conn.commit()
+
+    async def fetchone(self, query: str, *parameters):
+        await self.db.execute(query, parameters if parameters else ())
+        return await self.db.fetchone()
+
+    async def fetchall(self, query: str, *parameters):
+        await self.db.execute(query, parameters if parameters else ())
+        return await self.db.fetchall()    
+
+
 class Qolga(commands.Bot):
-    db: aiosqlite.Cursor
-    db_conn: aiosqlite.Connection
+    db: BotDB
     def __init__(self):
         self.dev = os.getenv('DEV_STATE')
         self.config = Config(self.dev)

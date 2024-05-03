@@ -30,30 +30,27 @@ class Tag(commands.Cog):
 
     async def get_tag(self, name: str):
         query = """SELECT * FROM tags WHERE LOWER(name) = ?"""
-        await self.bot.db.execute(query, (name.lower(),))
-        result = await self.bot.db.fetchall()
+        result = await self.bot.db.fetchall(query, name.lower())
 
         return result
     
     async def create_tag(self, interaction: discord.Interaction, name: str, content: str):
         query = """INSERT INTO tags (name, content) VALUES (?, ?)"""
         try:
-            await self.bot.db_conn.execute(query, (name, content))
+            await self.bot.db.execute(query, name, content, commit=False)
         except aiosqlite.IntegrityError:
             await interaction.response.send_message('ეს თეგი უკვე არსებობს.')
         except:
             await interaction.response.send_message('ვერ შეიქმნა თეგი')
         else:
-            await self.bot.db_conn.commit()
+            await self.bot.db.commit()
             await interaction.response.send_message(f'თეგი *{name}* წარმატებით შეიქმნა.')
 
     async def tags_autocomplete(self, interaction: discord.Interaction, current: str) -> list[app_commands.Choice[str]]:
         if not current:
-            await self.bot.db.execute('SELECT name FROM tags LIMIT 12;')
-            result = await self.bot.db.fetchall()
+            result = await self.bot.db.fetchall('SELECT name FROM tags LIMIT 12')
         else:
-            await self.bot.db.execute('SELECT name FROM tags WHERE LOWER(name) LIKE ?', (current.lower() + '%',))
-            result = await self.bot.db.fetchall()
+            result = await self.bot.db.fetchall('SELECT name FROM tags WHERE LOWER(name) LIKE ?', current.lower() + '%')
 
         return [app_commands.Choice(name=tag, value=tag) for tag, in result]
     
@@ -92,8 +89,7 @@ class Tag(commands.Cog):
 
         if content is None:
             query = """SELECT content FROM tags WHERE LOWER(name) = ?"""
-            await self.bot.db.execute(query, (name.lower(),))
-            row = await self.bot.db.fetchone()
+            row = await self.bot.db.fetchone(query, name.lower())
             
             if not row:
                 return await interaction.response.send_message(f'თეგი სახელად *{name}* არ არსებობს.', ephemeral=True)
@@ -108,13 +104,12 @@ class Tag(commands.Cog):
             return await interaction.response.send_message('თეგის ტექსტი არ შეიძლება 2000-ზე მეტი სიმბოლოსგან შედგებოდეს.')
 
         query = """UPDATE tags SET content = ? WHERE LOWER(name) = ?"""
-        result = await self.bot.db_conn.execute(query, (content, name.lower()))
-        await self.bot.db_conn.commit()
+        result = await self.bot.db.execute(query, content, name.lower())
 
         if result.rowcount == 0:
             await interaction.response.send_message(f'თეგი სახელად *{name}* არ არსებობს.', ephemeral=True)
         else:
-            await interaction.response.send_message('თეგი წარმატებით განახლდა.')
+            await interaction.response.send_message(f'თეგი *{name}* წარმატებით განახლდა.')
 
     @tag_group.command(name='remove', description='თეგის წაშლა')
     @app_commands.describe(name='თეგის სახელი')
@@ -125,8 +120,7 @@ class Tag(commands.Cog):
             return await interaction.response.send_message('შენ არ გაქვს ამ ქომანდის გამოყენების უფლება!', ephemeral=True)
 
         query = """DELETE FROM tags WHERE LOWER(name) = ?"""
-        result = await self.bot.db.execute(query, (name.lower(),))
-        await self.bot.db_conn.commit()
+        result = await self.bot.db.execute(query, name.lower())
 
         if result.rowcount == 0:
             await interaction.response.send_message(f'თეგი სახელად *{name}* არ არსებობს.', ephemeral=True)
