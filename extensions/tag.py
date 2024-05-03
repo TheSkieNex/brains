@@ -196,7 +196,6 @@ class Tag(commands.Cog):
             return await interaction.response.send_message('თეგის ტექსტი არ შეიძლება 2000-ზე მეტი სიმბოლოსგან შედგებოდეს.')
 
         result = None
-        query = ''
         if not is_content:
             query = 'UPDATE tags SET name = ?, content = ? WHERE LOWER(name) = ?'
             result = await self.bot.db.execute(query, changed_name, content, name.lower())
