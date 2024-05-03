@@ -8,17 +8,22 @@ from utils.bot import Qolga
 
 
 class TagModal(discord.ui.Modal, title='თეგის რედაქტირება'):
+    name = discord.ui.TextInput(
+        label='თეგის სახელი', required=True, style=discord.TextStyle.short, min_length=1, max_length=64
+    )
     content = discord.ui.TextInput(
         label='თეგის ტექტსი', required=True, style=discord.TextStyle.long, min_length=1, max_length=2000
     )
 
-    def __init__(self, text: str):
+    def __init__(self, name: str, content: str):
         super().__init__()
-        self.content.default = text
+        self.name.default = name
+        self.content.default = content
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
         self.interaction = interaction
-        self.text = str(self.content)
+        self.name_text = str(self.name)
+        self.content_text = str(self.content)
         self.stop()
 
 class TagAllView(discord.ui.View):
@@ -170,24 +175,34 @@ class Tag(commands.Cog):
         if admin_role not in interaction.user.roles and interaction.user.id != self.bot.config.owner_user_id:
             return await interaction.response.send_message('შენ არ გაქვს ამ ქომანდის გამოყენების უფლება!', ephemeral=True)
 
+        changed_name = ''
+        is_content = True
         if content is None:
-            query = """SELECT content FROM tags WHERE LOWER(name) = ?"""
+            query = """SELECT name, content FROM tags WHERE LOWER(name) = ?"""
             row = await self.bot.db.fetchone(query, name.lower())
-            
+
             if not row:
                 return await interaction.response.send_message(f'თეგი სახელად *{name}* არ არსებობს.', ephemeral=True)
 
-            modal = TagModal(row[0])
+            modal = TagModal(row[0], row[1])
             await interaction.response.send_modal(modal)
             await modal.wait()
             interaction = modal.interaction
-            content = modal.text
+            changed_name = modal.name_text
+            content = modal.content_text
+            is_content = False
                 
         if len(content) > 2000:
             return await interaction.response.send_message('თეგის ტექსტი არ შეიძლება 2000-ზე მეტი სიმბოლოსგან შედგებოდეს.')
 
-        query = """UPDATE tags SET content = ? WHERE LOWER(name) = ?"""
-        result = await self.bot.db.execute(query, content, name.lower())
+        result = None
+        query = ''
+        if not is_content:
+            query = 'UPDATE tags SET name = ?, content = ? WHERE LOWER(name) = ?'
+            result = await self.bot.db.execute(query, changed_name, content, name.lower())
+        else:
+            query = 'UPDATE tags SET content = ? WHERE LOWER(name) = ?'
+            result = await self.bot.db.execute(query, content, name.lower())
 
         if result.rowcount == 0:
             await interaction.response.send_message(f'თეგი სახელად *{name}* არ არსებობს.', ephemeral=True)
@@ -218,7 +233,7 @@ class Tag(commands.Cog):
         embed.title = 'თეგები'
 
         view = None
-        page = (len(result) // 5) + 1
+        page = (len(result) // 5) + 1 if len(result) % 5 != 0 else len(result) // 5
         if len(result) > 5:
             embed.description = '\n'.join(tag[0] for tag in result[:5])
             embed.set_footer(text=f'გვერდი 1/{page}')
