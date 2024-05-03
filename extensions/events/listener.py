@@ -3,7 +3,6 @@ from discord.ext import commands
 
 from utils.bot import Qolga
 from utils.ticket import setup_ticket_system
-from utils.utils import ICON_URL
 from datetime import datetime
 
 
@@ -43,7 +42,7 @@ class Listener(commands.Cog):
         embed.add_field(name='Rules', value='<#1233170863897968700>', inline=False)
         embed.add_field(name='General', value='<#1125326451944738850>', inline=False)
         embed.add_field(name='Created', value=discord.utils.format_dt(member.created_at, 'R'), inline=False)
-        embed.set_thumbnail(url=member.avatar.url if member.avatar else ICON_URL)
+        embed.set_thumbnail(url=member.avatar.url if member.avatar else self.bot.config.icon_url)
         embed.set_author(name=member.display_name, icon_url=member.avatar.url if member.avatar else None)
         embed.timestamp = datetime.now()
 
