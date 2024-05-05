@@ -38,10 +38,10 @@ class Listener(commands.Cog):
 
         welcome_channel = member.guild.get_channel(self.bot.config.welcome_channel_id)
         embed = discord.Embed(color=self.bot.config.main_color)
-        embed.description = f'<a:purpleheart:1233379992348659756> Welcome to {member.guild.name}! <a:purpleheart:1233379992348659756>'
-        embed.add_field(name='Rules', value='<#1233170863897968700>', inline=False)
-        embed.add_field(name='General', value='<#1125326451944738850>', inline=False)
-        embed.add_field(name='Created', value=discord.utils.format_dt(member.created_at, 'R'), inline=False)
+        embed.description = f'<a:purpleheart:1233379992348659756> მოგესალმებით {member.guild.name} სერვერზე! <a:purpleheart:1233379992348659756>'
+        embed.add_field(name='წესები', value='<#1233170863897968700>', inline=False)
+        embed.add_field(name='მთავარი', value='<#1125326451944738850>', inline=False)
+        embed.add_field(name='შეიქმნა', value=discord.utils.format_dt(member.created_at, 'R'), inline=False)
         embed.set_thumbnail(url=member.avatar.url if member.avatar else member.default_avatar.url)
         embed.set_author(name=member.display_name, icon_url=member.avatar.url if member.avatar else member.default_avatar.url)
         embed.timestamp = datetime.now()
