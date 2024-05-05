@@ -17,6 +17,7 @@ extensions = (
     'extensions.ticket',
     'extensions.information',
     'extensions.tag',
+    'extensions.general',
 )
 
 class BotDB:

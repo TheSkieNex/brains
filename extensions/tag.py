@@ -140,17 +140,17 @@ class Tag(commands.Cog):
         return [app_commands.Choice(name=tag, value=tag) for tag, in result]
     
     @tag_group.command(name='get', description='თეგის გამოძახება')
-    @app_commands.describe(name='თეგის სახელი')
+    @app_commands.describe(name='თეგის სახელი', mention='წევრი ვინც გინდა, რომ მოინიშნოს')
     @app_commands.autocomplete(name=tags_autocomplete)
-    async def tag(self, interaction: discord.Interaction, name: str):
+    async def tag(self, interaction: discord.Interaction, name: str, mention: discord.Member = None):
         try:
             tag = await self.get_tag(name)
             if not tag:
                 return await interaction.response.send_message(f'თეგი სახელად *{name}* არ არსებობს.', ephemeral=True)
         except RuntimeError as e:
             return await interaction.response.send_message(str(e))
-
-        await interaction.response.send_message(tag[0][1])
+        
+        await interaction.response.send_message(tag[0][1] if not mention else tag[0][1] + ' ' + mention.mention)
 
     @tag_group.command(name='create', description='თეგის შექმნა')
     @app_commands.describe(name='თეგის სახელი', content='თეგის თექსტი')
