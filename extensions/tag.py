@@ -40,7 +40,7 @@ class TagAllView(discord.ui.View):
         self.max_page = (len(self.data) // 5) + 1
         super().__init__(timeout=timeout)
 
-    def create_embed(self, *, description: str, footer_text: str):
+    async def create_embed(self, *, description: str, footer_text: str):
         embed = discord.Embed(color=self.color)
         embed.title = 'თეგები'
         embed.description = description
@@ -51,7 +51,7 @@ class TagAllView(discord.ui.View):
     @discord.ui.button(emoji='⏮️', style=discord.ButtonStyle.blurple)
     async def fast_rewind_back(self, interaction: discord.Interaction, button: discord.Button):
         self.k = 0
-        embed = self.create_embed(
+        embed = await self.create_embed(
             description='\n'.join(tag[0] for tag in self.data[:5]),
             footer_text=f'გვერდი 1/{self.max_page}'
         )
@@ -64,7 +64,7 @@ class TagAllView(discord.ui.View):
         if self.k > 0: self.k -= 1
         data = self.data[5*self.k:(self.k+1)*5]
         if data:
-            embed = self.create_embed(
+            embed = await self.create_embed(
                 description='\n'.join(tag[0] for tag in data),
                 footer_text=f'გვერდი {self.k+1}/{self.max_page}'
             )
@@ -82,7 +82,7 @@ class TagAllView(discord.ui.View):
         if self.k != max_k: self.k += 1
         data = self.data[5*self.k:(self.k+1)*5]
         if data:
-            embed = self.create_embed(
+            embed = await self.create_embed(
                 description='\n'.join(tag[0] for tag in data),
                 footer_text=f'გვერდი {self.k+1}/{self.max_page}'
             )
@@ -99,7 +99,7 @@ class TagAllView(discord.ui.View):
         if max_k*5 == len(self.data): max_k -= 1
         self.k = max_k
 
-        embed = self.create_embed(
+        embed = await self.create_embed(
             description='\n'.join(tag[0] for tag in self.data[max_five_multiple:]),
             footer_text=f'გვერდი {self.max_page}/{self.max_page}'
         )

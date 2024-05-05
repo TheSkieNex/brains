@@ -7,3 +7,5 @@ venv
 database/database.db
 
 test.py
+
+extensions/moderation/modlog.py

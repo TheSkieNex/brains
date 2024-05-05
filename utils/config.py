@@ -11,6 +11,7 @@ class Config:
         self.ticket_category_id = 1232724511250583676 if self.dev else 1233428987057803395
         self.community_role_id = 1071117063411748935 if self.dev else 1125366325909409832
         self.welcome_channel_id = 1071115646257090580 if self.dev else 1125363834018873436
+        # self.modlog_channel_id = 1071115646257090580 if self.dev else 1233398121178857594
         self.guild_id = 1070804318485233766 if self.dev else 1125326451944738847
 
         self.owner_user_id = 530689295699148800
