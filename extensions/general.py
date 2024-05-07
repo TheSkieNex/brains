@@ -24,5 +24,23 @@ class GeneralCommands(commands.Cog):
         else:
             await ctx.send(f'ემოჯი <:{emoji.name}:{emoji.id}> დაემატა სერვერზე!')
 
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    async def give(self, ctx: commands.Context, role: str):
+        if ctx.message.type == discord.MessageType.reply:
+            try:
+                message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+                _role = ctx.guild.get_role(int(role[3:len(role)-1]))
+
+                for user_id in message.raw_mentions:
+                    user = ctx.guild.get_member(user_id)
+                    await user.add_roles(_role)
+
+                await ctx.send(f'როლი დაემატა {len(message.raw_mentions)} წევრს.')
+            except:
+                await ctx.send('რაღაც პრობლემაა, ხელახლა სცადეთ.')
+
+ 
 async def setup(bot: Qolga):
     await bot.add_cog(GeneralCommands(bot))
