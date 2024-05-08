@@ -56,12 +56,12 @@ class GeneralCommands(commands.Cog):
             ids_in_message = re.findall(r'(?<!<@)\b\d+\b(?!>)', message.content)
 
             for id in ids_in_message:
-                if len(id) >= 9:
+                if len(id) >= 6:
                     players_ids.add(id)
 
         file_content = '\n'.join(players_ids)
         file_object = io.StringIO(file_content)
-        file = discord.File(file_object, filename="players_ids.txt")
+        file = discord.File(file_object, filename='players_ids.txt')
 
         await ctx.send(f'ჩაიწერა {len(players_ids)} მოთამაშის აიდი.', file=file)
 
