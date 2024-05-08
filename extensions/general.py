@@ -1,3 +1,6 @@
+import re
+import io
+
 import discord
 import requests
 
@@ -40,6 +43,27 @@ class GeneralCommands(commands.Cog):
                 await ctx.send(f'როლი დაემატა {len(message.raw_mentions)} წევრს.')
             except:
                 await ctx.send('რაღაც პრობლემაა, ხელახლა სცადეთ.')
+
+    @commands.command()
+    @commands.guild_only()
+    @commands.is_owner()
+    # @commands.has_permissions(administrator=True)
+    async def get_players_ids(self, ctx: commands.Context, limit: str):
+        players_ids = set()
+        messages = [message async for message in ctx.channel.history(limit=int(limit))]
+
+        for message in messages:
+            ids_in_message = re.findall(r'(?<!<@)\b\d+\b(?!>)', message.content)
+
+            for id in ids_in_message:
+                if len(id) >= 9:
+                    players_ids.add(id)
+
+        file_content = '\n'.join(players_ids)
+        file_object = io.StringIO(file_content)
+        file = discord.File(file_object, filename="players_ids.txt")
+
+        await ctx.send(f'ჩაიწერა {len(players_ids)} მოთამაშის აიდი.', file=file)
 
  
 async def setup(bot: Qolga):
