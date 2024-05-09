@@ -2,8 +2,9 @@ import discord
 from discord.ext import commands
 
 from utils.bot import Qolga
-from utils.ticket import setup_ticket_system
 from datetime import datetime
+
+from utils.views import TicketSetupView, TicketCloseView, TicketCloseWarningView, TicketClosedView
 
 
 class Listener(commands.Cog):
@@ -12,24 +13,10 @@ class Listener(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        ticket_channel = self.bot.get_channel(self.bot.config.ticket_channel_id)
-
-        embed = discord.Embed(color=self.bot.config.main_color)
-        embed.title = 'რეპორტი'
-        embed.description = 'უმიზეზოდ თიქეთის გახსნა დაუშვებელია!'
-
-        create_button = discord.ui.Button(label='თიქეთის გახსნა', style=discord.ButtonStyle.secondary)
-
-        async def create_button_callback(inter: discord.Interaction):
-            await setup_ticket_system(self.bot, inter)
-
-        create_button.callback = create_button_callback
-
-        view = discord.ui.View(timeout=None)
-        view.add_item(create_button)
-
-        await ticket_channel.purge(limit=1)
-        await ticket_channel.send(embed=embed, view=view)
+        self.bot.add_view(TicketSetupView(self.bot))
+        self.bot.add_view(TicketCloseView(self.bot))
+        self.bot.add_view(TicketCloseWarningView(self.bot))
+        self.bot.add_view(TicketClosedView(self.bot))
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):

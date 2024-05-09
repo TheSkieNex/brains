@@ -1,10 +1,10 @@
 import discord
 
 from discord.ext import commands
-from discord import app_commands, ui
+from discord import app_commands
 
 from utils.bot import Qolga
-from utils.ticket import setup_ticket_system
+from utils.views import TicketSetupView
 
 
 class Ticket(commands.Cog):
@@ -27,17 +27,7 @@ class Ticket(commands.Cog):
         embed.title = 'რეპორტი'
         embed.description = 'უმიზეზოდ თიქეთის გახსნა დაუშვებელია!'
 
-        create_button = ui.Button(label='თიქეთის გახსნა', style=discord.ButtonStyle.secondary)
-
-        async def create_button_callback(inter: discord.Interaction):
-            await setup_ticket_system(self.bot, inter)
-
-        create_button.callback = create_button_callback
-
-        view = ui.View(timeout=None)
-        view.add_item(create_button)
-
-        await ticket_channel.send(embed=embed, view=view)
+        await ticket_channel.send(embed=embed, view=TicketSetupView(self.bot))
         await ctx.reply('თიქეთის სისტემა გამზადებულია', delete_after=.5)
 
 
