@@ -8,3 +8,9 @@ CREATE TABLE IF NOT EXISTS ticket_interactions (
     user_id INTEGER NOT NULL,
     channel_id INTEGER NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS cap_transfer_usage (
+    id INTEGER NOT NULL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    role_id INTEGER NOT NULL
+);

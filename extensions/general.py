@@ -159,16 +159,35 @@ class GeneralCommands(commands.Cog):
                     roles.append(_role.id)
             
             if len(roles) == 1:
-                _role = interaction.guild.get_role(roles[0])
-                await member.add_roles(_role)
+                query = 'SELECT * FROM cap_transfer_usage WHERE user_id = ? AND role_id = ?'
+                db_result = await self.bot.db.fetchone(query, interaction.user.id, roles[0])
 
-                await interaction.response.send_message(f'როლი წარმატებით გადაეცა {member.mention}-ს')
+                if not db_result:
+                    _role = interaction.guild.get_role(roles[0])
+                    await member.add_roles(_role)
+
+                    query = 'INSERT INTO cap_transfer_usage (user_id, role_id) VALUES (?, ?)'
+                    await self.bot.db.execute(query, interaction.user.id, roles[0])
+
+                    await interaction.response.send_message(f'როლი წარმატებით გადაეცა {member.mention}-ს.')
+                else:
+                    await interaction.response.send_message('თქვენ უკვე გადაცემული გაქვთ როლი სხვისთვის.', ephemeral=True)
             else:
-                await interaction.response.send_message('ამ შემთხვევაში მხოლოდ ორგანიზატორს შეუძლია როლის გადაცემა', ephemeral=True)
-
-
-
+                await interaction.response.send_message('ამ შემთხვევაში მხოლოდ ორგანიზატორს შეუძლია როლის გადაცემა.', ephemeral=True)
     
+    @commands.command()
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    async def clear_cap(self, ctx: commands.Context, role: str):
+        _role = ctx.guild.get_role(int(role[3:len(role)-1]))
+        query = 'DELETE FROM cap_transfer_usage WHERE role_id = ?'
+        result = await self.bot.db.execute(query, _role.id)
+
+        if result.rowcount == 0:
+            await ctx.send('მონაცემები არ არსებობს.')
+        else:
+            await ctx.send('მონაცემები წარმატებით გასუფთავდა.')
+        
     
 async def setup(bot: Qolga):
     await bot.add_cog(GeneralCommands(bot))
