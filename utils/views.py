@@ -128,7 +128,7 @@ class CheckInView(discord.ui.View):
         await self.execute_interaction(interaction, 0)
 
     async def execute_interaction(self, interaction: discord.Interaction, type: int):
-        list_message = [message async for message in interaction.channel.history(limit=10)]
+        list_message = [message async for message in interaction.channel.history(limit=100)]
         list_content = list_message[len(list_message)-1].content
 
         response_message = 'უარყოფილი იქნა ❌' if type == 0 else 'დადასტურდა ✅'
