@@ -146,6 +146,29 @@ class GeneralCommands(commands.Cog):
         except:
             await interaction.response.send_message('რაღაც პრობლემაა, ხელახლა სცადეთ.', ephemeral=True)
 
- 
+    @app_commands.command(name='cap', description='მენეჯერის როლის სხვისთვის მიცემა')
+    @app_commands.guild_only()
+    @app_commands.describe(member='ვისაც როლი უნდა გადაეცემა')
+    async def cap(self, interaction: discord.Interaction, member: discord.Member):
+        if interaction.channel.id == 1241354436773806183:
+            exception_roles = [1234921072940552224, self.bot.config.community_role_id]
+
+            roles = []
+            for _role in interaction.user.roles:
+                if _role.id not in exception_roles and _role.name.startswith('ჯგუფი'):
+                    roles.append(_role.id)
+            
+            if len(roles) == 1:
+                _role = interaction.guild.get_role(roles[0])
+                await member.add_roles(_role)
+
+                await interaction.response.send_message(f'როლი წარმატებით გადაეცა {member.mention}-ს')
+            else:
+                await interaction.response.send_message('ამ შემთხვევაში მხოლოდ ორგანიზატორს შეუძლია როლის გადაცემა', ephemeral=True)
+
+
+
+    
+    
 async def setup(bot: Qolga):
     await bot.add_cog(GeneralCommands(bot))
