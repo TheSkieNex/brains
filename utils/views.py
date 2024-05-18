@@ -5,6 +5,8 @@ import discord
 from datetime import datetime
 from . import bot
 
+from utils.selects import CheckInSelect
+
 
 async def create_ticket_channel(bot: bot.Qolga, interaction: discord.Interaction):
     ticket_category = interaction.guild.get_channel(bot.config.ticket_category_id)
@@ -111,3 +113,73 @@ class TicketClosedView(discord.ui.View):
         await self.bot.db.execute(query, interaction.channel.id)
         
         await interaction.channel.delete()
+
+class CheckInView(discord.ui.View):
+    def __init__(self, bot: bot.Qolga):
+        self.bot = bot
+        super().__init__(timeout=None)
+
+    @discord.ui.button(label='დადასტურება', style=discord.ButtonStyle.green, custom_id='qolga:check_in_accept')
+    async def accept_button(self, interaction: discord.Interaction, button: discord.Button):
+        await self.execute_interaction(interaction, 1)
+
+    @discord.ui.button(label='უარყოფა', style=discord.ButtonStyle.danger, custom_id='qolga:check_in_reject')
+    async def reject_button(self, interaction: discord.Interaction, button: discord.Button):
+        await self.execute_interaction(interaction, 0)
+
+    async def execute_interaction(self, interaction: discord.Interaction, type: int):
+        list_message = [message async for message in interaction.channel.history(limit=10)]
+        list_content = list_message[len(list_message)-1].content
+
+        response_message = 'უარყოფილი იქნა ❌' if type == 0 else 'დადასტურდა ✅'
+        response = 'უარყოფილია' if type == 0 else 'დადასტურებულია'
+        format = '~~' if type == 0 else '__'
+
+        if interaction.user.id in list_message[len(list_message)-1].raw_mentions:
+            lines = list_content.split('\n')
+
+            if list_message[len(list_message)-1].raw_mentions.count(interaction.user.id) == 1:
+                for i, line in enumerate(lines):
+                    if str(interaction.user.id) in line:
+                        dot_index = line.find('.')
+                        id_index = line.find('<@')
+                        
+                        team_name = line[dot_index+1:id_index].strip()
+                        team_name_clean = (
+                            team_name[2:len(team_name)-2] 
+                            if team_name.startswith('__')
+                            or team_name.startswith('~~')
+                            else team_name
+                        )
+                        updated_line = line[0:dot_index] + '. ' + format+team_name_clean+format + ' ' + line[id_index:]
+                        lines[i] = updated_line                        
+                        break
+                
+                await list_message[len(list_message)-1].edit(content='\n'.join(lines))
+                await interaction.response.send_message(response_message, ephemeral=True)
+            else:
+                team_names = []
+                for i, line in enumerate(lines):
+                    if str(interaction.user.id) in line:
+                        dot_index = line.find('.')
+                        id_index = line.find(f'<@{interaction.user.id}>')
+
+                        team_name = line[dot_index+1:id_index].strip()
+                        if not team_name.startswith(format):
+                            team_name_clean = (
+                                team_name[2:len(team_name)-2] 
+                                if team_name.startswith('_') 
+                                or team_name.startswith('~') 
+                                else team_name
+                            )
+                            team_names.append(team_name_clean)
+                
+                if team_names:
+                    view = discord.ui.View(timeout=None)
+                    view.add_item(CheckInSelect(team_names, type))
+
+                    await interaction.response.send_message('ქვემოთ მოცემული გუნდებიდან აირჩიე სასურველი გუნდი', view=view, ephemeral=True)
+                else:
+                    await interaction.response.send_message(f'ყველა თქვენი გუნდი {response}', ephemeral=True)
+        else:
+            await interaction.response.send_message('თქვენ არ ხართ ლისტში მონიშნული', ephemeral=True)

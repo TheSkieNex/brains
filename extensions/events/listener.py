@@ -4,7 +4,13 @@ from discord.ext import commands
 from utils.bot import Qolga
 from datetime import datetime
 
-from utils.views import TicketSetupView, TicketCloseView, TicketCloseWarningView, TicketClosedView
+from utils.views import (
+    TicketSetupView, 
+    TicketCloseView, 
+    TicketCloseWarningView, 
+    TicketClosedView, 
+    CheckInView
+)
 
 
 class Listener(commands.Cog):
@@ -17,6 +23,7 @@ class Listener(commands.Cog):
         self.bot.add_view(TicketCloseView(self.bot))
         self.bot.add_view(TicketCloseWarningView(self.bot))
         self.bot.add_view(TicketClosedView(self.bot))
+        self.bot.add_view(CheckInView(self.bot))
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
