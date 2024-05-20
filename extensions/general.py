@@ -10,6 +10,7 @@ from discord import app_commands
 from io import BytesIO
 from utils.bot import Qolga
 from utils.views import CheckInView
+from utils.selects import CapSelect
 
 
 class TeamListModal(discord.ui.Modal, title='ჯგუფის გუნდების სია'):
@@ -228,24 +229,28 @@ class GeneralCommands(commands.Cog):
             roles = []
             for _role in interaction.user.roles:
                 if _role.id not in exception_roles and _role.name.startswith('ჯგუფი'):
-                    roles.append(_role.id)
+                    roles.append({'role_name': _role.name, 'role_id': _role.id})
             
             if len(roles) == 1:
+                print(roles)
                 query = 'SELECT * FROM cap_transfer_usage WHERE user_id = ? AND role_id = ?'
-                db_result = await self.bot.db.fetchone(query, interaction.user.id, roles[0])
+                db_result = await self.bot.db.fetchone(query, interaction.user.id, roles[0]['role_id'])
 
                 if not db_result:
-                    _role = interaction.guild.get_role(roles[0])
+                    _role = interaction.guild.get_role(roles[0]['role_id'])
                     await member.add_roles(_role)
 
                     query = 'INSERT INTO cap_transfer_usage (user_id, role_id) VALUES (?, ?)'
-                    await self.bot.db.execute(query, interaction.user.id, roles[0])
+                    await self.bot.db.execute(query, interaction.user.id, roles[0]['role_id'])
 
                     await interaction.response.send_message(f'როლი წარმატებით გადაეცა {member.mention}-ს.')
                 else:
                     await interaction.response.send_message('თქვენ უკვე გადაცემული გაქვთ როლი სხვისთვის.', ephemeral=True)
             else:
-                await interaction.response.send_message('ამ შემთხვევაში მხოლოდ ორგანიზატორს შეუძლია როლის გადაცემა.', ephemeral=True)
+                view = discord.ui.View(timeout=None)
+                view.add_item(CapSelect(self.bot, roles, member))
+
+                await interaction.response.send_message('მიყევით ინსტრუქციას', view=view, ephemeral=True)
     
     @commands.command()
     @commands.guild_only()
