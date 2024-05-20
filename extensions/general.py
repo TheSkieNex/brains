@@ -221,7 +221,7 @@ class GeneralCommands(commands.Cog):
 
     @app_commands.command(name='cap', description='მენეჯერის როლის სხვისთვის მიცემა')
     @app_commands.guild_only()
-    @app_commands.describe(member='ვისაც როლი უნდა გადაეცემა')
+    @app_commands.describe(member='ვისაც როლი გადაეცემა')
     async def cap(self, interaction: discord.Interaction, member: discord.Member):
         if interaction.channel.id == 1241354436773806183:
             exception_roles = [1234921072940552224, self.bot.config.community_role_id]
