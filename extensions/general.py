@@ -250,7 +250,7 @@ class GeneralCommands(commands.Cog):
                 view = discord.ui.View(timeout=None)
                 view.add_item(CapSelect(self.bot, roles, member))
 
-                await interaction.response.send_message('მიყევით ინსტრუქციას', view=view, ephemeral=True)
+                await interaction.response.send_message('ქვემოთ მოცემული ჯგუფებიდან აირჩიე ჯგუფი, რომლის როლის გადაცემაც გსურს.', view=view, ephemeral=True)
     
     @commands.command()
     @commands.guild_only()
