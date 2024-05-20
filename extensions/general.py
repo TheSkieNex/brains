@@ -246,12 +246,12 @@ class GeneralCommands(commands.Cog):
                     await interaction.response.send_message(f'როლი წარმატებით გადაეცა {member.mention}-ს.')
                 else:
                     await interaction.response.send_message('თქვენ უკვე გადაცემული გაქვთ როლი სხვისთვის.', ephemeral=True)
-            else:
+            elif len(roles) > 1:
                 view = discord.ui.View(timeout=None)
                 view.add_item(CapSelect(self.bot, roles, member))
 
                 await interaction.response.send_message('ქვემოთ მოცემული ჯგუფებიდან აირჩიე ჯგუფი, რომლის როლის გადაცემაც გსურს.', view=view, ephemeral=True)
-    
+
     @commands.command()
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
