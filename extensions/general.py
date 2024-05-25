@@ -232,7 +232,6 @@ class GeneralCommands(commands.Cog):
                     roles.append({'role_name': _role.name, 'role_id': _role.id})
             
             if len(roles) == 1:
-                print(roles)
                 query = 'SELECT * FROM cap_transfer_usage WHERE user_id = ? AND role_id = ?'
                 db_result = await self.bot.db.fetchone(query, interaction.user.id, roles[0]['role_id'])
 
