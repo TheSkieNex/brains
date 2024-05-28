@@ -206,7 +206,7 @@ class GeneralCommands(commands.Cog):
         await interaction.response.is_done()
 
     @app_commands.command(name='check_in', description='თამაშის დასტურის მესიჯი')
-    @app_commands.guild_only
+    @app_commands.guild_only()
     @app_commands.default_permissions(administrator=True)
     async def check_in(self, interaction: discord.Interaction):
         try:
