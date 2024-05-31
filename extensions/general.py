@@ -281,6 +281,8 @@ class GeneralCommands(commands.Cog):
                 view.add_item(CapSelect(self.bot, roles, member))
 
                 await interaction.response.send_message('ქვემოთ მოცემული ჯგუფებიდან აირჩიე ჯგუფი, რომლის როლის გადაცემაც გსურს.', view=view, ephemeral=True)
+            else:
+                await interaction.response.send_message('აუცილებელია ჯგუფის როლო გქონდეთ', ephemeral=True)
         else:
             await interaction.response.send_message(f'ამ ქომანდის გამოყენება მხოლოდ აქ <#1241354436773806183> შეგიძლია.', ephemeral=True)
 
