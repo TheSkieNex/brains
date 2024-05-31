@@ -2,6 +2,8 @@ __pycache__/
 
 venv
 
+myenv
+
 .env
 
 database/database.db

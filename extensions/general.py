@@ -73,11 +73,18 @@ class GeneralCommands(commands.Cog):
                 message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
                 _role = ctx.guild.get_role(int(role[3:len(role)-1]))
 
+                errors = 0
                 for user_id in message.raw_mentions:
-                    user = ctx.guild.get_member(user_id)
-                    await user.add_roles(_role)
+                    try: 
+                        user = ctx.guild.get_member(user_id)
+                        await user.add_roles(_role)
+                    except:
+                        errors += 1
+                        continue
 
                 await ctx.message.add_reaction('✅')
+                if errors > 0:
+                    await ctx.send(f'{errors} წევრი სერვერიდან გასულია.')
             except:
                 await ctx.send('რაღაც პრობლემაა, ხელახლა სცადეთ.')
 
@@ -89,12 +96,19 @@ class GeneralCommands(commands.Cog):
             try:
                 message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
                 _role = ctx.guild.get_role(int(role[3:len(role)-1]))
-
+                
+                errors = 0
                 for user_id in message.raw_mentions:
-                    user = ctx.guild.get_member(user_id)
-                    await user.remove_roles(_role)
+                    try:
+                        user = ctx.guild.get_member(user_id)
+                        await user.remove_roles(_role)
+                    except:
+                        errors += 1
+                        continue
 
                 await ctx.message.add_reaction('✅')
+                if errors > 0:
+                    await ctx.send(f'{errors} წევრი სერვერიდან გასულია.')
             except:
                 await ctx.send('რაღაც პრობლემაა, ხელახლა სცადეთ.')
 

@@ -9,7 +9,7 @@ from utils.bot import Qolga, BotDB
 load_dotenv()
 
 DEV = os.getenv('DEV_STATE')
-token = os.getenv('TEST_BOT_TOKEN') if DEV else os.getenv('BOT_TOKEN')
+TOKEN = os.getenv('TEST_BOT_TOKEN') if DEV else os.getenv('BOT_TOKEN')
 
 async def run_sql_commands(db: aiosqlite.Cursor, db_conn: aiosqlite.Connection):
     with open('database/schema.sql', 'r') as schema:
@@ -31,7 +31,7 @@ async def run_bot():
             bot.db = BotDB(cursor, db_connection)
 
             bot.remove_command('help')
-            await bot.start(token)
+            await bot.start(TOKEN)
     
 def main():
     asyncio.run(run_bot())
