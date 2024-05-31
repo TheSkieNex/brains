@@ -282,7 +282,7 @@ class GeneralCommands(commands.Cog):
 
                 await interaction.response.send_message('ქვემოთ მოცემული ჯგუფებიდან აირჩიე ჯგუფი, რომლის როლის გადაცემაც გსურს.', view=view, ephemeral=True)
             else:
-                await interaction.response.send_message('აუცილებელია ჯგუფის როლო გქონდეთ', ephemeral=True)
+                await interaction.response.send_message('აუცილებელია, რომ ჯგუფის როლი გქონდეთ', ephemeral=True)
         else:
             await interaction.response.send_message(f'ამ ქომანდის გამოყენება მხოლოდ აქ <#1241354436773806183> შეგიძლია.', ephemeral=True)
 
