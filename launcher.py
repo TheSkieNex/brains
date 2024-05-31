@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from utils.bot import Qolga, BotDB
 
-load_dotenv()
+load_dotenv('./env')
 
 DEV = os.getenv('DEV_STATE')
 TOKEN = os.getenv('TEST_BOT_TOKEN') if DEV else os.getenv('BOT_TOKEN')
