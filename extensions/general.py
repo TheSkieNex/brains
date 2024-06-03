@@ -184,7 +184,7 @@ class GeneralCommands(commands.Cog):
 
         lines = list_message_content.split('\n')
 
-        group = lines[0][lines[0].find('ჯგუფი'):][6:]
+        group = lines[0][lines[0].find('-'):][2:]
         list_text = ''
         day = ''
         maps = ''
