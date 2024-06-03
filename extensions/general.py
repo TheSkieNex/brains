@@ -15,7 +15,7 @@ from utils.selects import CapSelect
 
 class TeamListModal(discord.ui.Modal, title='ჯგუფის გუნდების სია'):
     group = discord.ui.TextInput(
-        label='ჯგუფი', required=True, style=discord.TextStyle.short,  min_length=1, max_length=64
+        label='ჯგუფის სახელი', required=True, style=discord.TextStyle.short,  min_length=1, max_length=64
     )
     list_text = discord.ui.TextInput(
         label='გუნდების სია', required=True, style=discord.TextStyle.long, min_length=1, max_length=2000
@@ -164,7 +164,7 @@ class GeneralCommands(commands.Cog):
         )
 
         formatted_text = f"""
-            <:umbrellatour:1233412554320117912> **Umbrella Tournament - ჯგუფი {group}
+            <:umbrellatour:1233412554320117912> **Umbrella Tournament - {group}
             {formatted_string}**
             **<a:att:1241259984428335144> დრო: {match_day} - 22:00 საათი**
             **<a:att:1241259984428335144> {total_maps} რუკა:** **{four_maps if total_maps == 4 else five_maps}**
@@ -226,7 +226,7 @@ class GeneralCommands(commands.Cog):
         )
 
         formatted_text = f"""
-            <:umbrellatour:1233412554320117912> **Umbrella Tournament - ჯგუფი {group}
+            <:umbrellatour:1233412554320117912> **Umbrella Tournament - {group}
             {formatted_string}**
             **<a:att:1241259984428335144> დრო: {match_day} - 22:00 საათი**
             **<a:att:1241259984428335144> {total_maps} რუკა:** **{four_maps if total_maps == 4 else five_maps}**
