@@ -246,7 +246,7 @@ class GeneralCommands(commands.Cog):
                 '**გთხოვთ დაადასტუროთ/უარყოთ მონაწილეობა დღევანდელ თამაშზე 12:00 საათიდან 20:00 საათამდე**'
             )
 
-            await interaction.response.send_message('<@&1234921072940552224>', embed=embed, view=CheckInView(self.bot))
+            await interaction.response.send_message(embed=embed, view=CheckInView(self.bot))
         except:
             await interaction.response.send_message('რაღაც პრობლემაა, ხელახლა სცადეთ.', ephemeral=True)
 
