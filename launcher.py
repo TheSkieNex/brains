@@ -4,7 +4,7 @@ import aiosqlite
 
 from dotenv import load_dotenv
 
-from utils.bot import Qolga, BotDB
+from utils.bot import Brains, BotDB
 
 load_dotenv('./env')
 
@@ -23,7 +23,7 @@ async def run_sql_commands(db: aiosqlite.Cursor, db_conn: aiosqlite.Connection):
 
 async def run_bot():
     async with aiosqlite.connect('database/database.db') as db_connection:
-        async with Qolga() as bot:
+        async with Brains() as bot:
             cursor = await db_connection.cursor()
             await run_sql_commands(cursor, db_connection)
 

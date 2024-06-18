@@ -4,15 +4,15 @@ from discord.ext import commands
 from discord import app_commands
 from discord.utils import format_dt
 
-from utils.bot import Qolga
+from utils.bot import Brains
 from datetime import datetime
 
 
 class Information(commands.Cog):
-    def __init__(self, bot: Qolga):
+    def __init__(self, bot: Brains):
         self.bot = bot
 
-    @app_commands.command(name='server', description='სერვერის ინფორმაცია')
+    @app_commands.command(name='server', description='Server information')
     @app_commands.guild_only()
     async def server_info(self, interaction: discord.Interaction):
         guild = self.bot.get_guild(self.bot.config.guild_id)
@@ -55,7 +55,7 @@ class Information(commands.Cog):
 
         await interaction.response.send_message(embed=embed)
 
-    @app_commands.command(name='user', description='წევრის ინფორმაცია')
+    @app_commands.command(name='user', description='User information')
     @app_commands.guild_only()
     async def user_info(self, interaction: discord.Interaction, member: discord.Member = None):
         if not member:
@@ -84,5 +84,5 @@ class Information(commands.Cog):
         await interaction.response.send_message(embed=embed)
 
 
-async def setup(bot: Qolga):
+async def setup(bot: Brains):
     await bot.add_cog(Information(bot))

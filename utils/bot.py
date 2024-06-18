@@ -18,6 +18,7 @@ extensions = (
     'extensions.information',
     'extensions.tag',
     'extensions.general',
+    'extensions.list',
 )
 
 class BotDB:
@@ -43,7 +44,7 @@ class BotDB:
         return await self.db.fetchall()    
 
 
-class Qolga(commands.Bot):
+class Brains(commands.Bot):
     db: BotDB
     def __init__(self):
         self.dev = os.getenv('DEV_STATE')

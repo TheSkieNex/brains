@@ -3,8 +3,8 @@ from utils.utils import ICON_URL
 class Config:
     def __init__(self, dev: bool):
         self.dev = dev
-        self.main_color = 0x9e22e3
-        self.second_color = 0x3c2b40
+        self.main_color = 0x04a3e7
+        self.second_color = 0x62ebf5
         self.icon_url = ICON_URL
 
         self.ticket_channel_id = 1074718558552076469 if self.dev else 1233184738710388736

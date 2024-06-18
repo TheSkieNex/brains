@@ -1,10 +1,8 @@
 from .moderation import Moderation
-# from .modlog import ModLog
 
 
 class Mod(
     Moderation,
-    # ModLog
 ):
     pass
 
