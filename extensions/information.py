@@ -34,6 +34,8 @@ class Information(commands.Cog):
         
         embed = discord.Embed(color=self.bot.config.main_color)
         embed.title = interaction.guild.name
+        if interaction.guild.icon:
+            embed.set_thumbnail(url=interaction.guild.icon.url)
 
         embed.description = f'Created: {format_dt(interaction.guild.created_at, style="R")}'
         embed.add_field(name='Server ID', value=interaction.guild.id, inline=False)
