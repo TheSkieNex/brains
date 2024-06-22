@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from utils.bot import Brains, BotDB
 
-load_dotenv(os.path.join(os.path.abspath(os.path.dirname(__file__) + os.sep + os.pardir), './env')
+load_dotenv(os.path.join(os.path.abspath(os.path.dirname(__file__) + os.sep + os.pardir), ".env"))
 
 DEV = os.getenv('DEV_STATE')
 TOKEN = os.getenv('TEST_BOT_TOKEN') if DEV else os.getenv('BOT_TOKEN')
