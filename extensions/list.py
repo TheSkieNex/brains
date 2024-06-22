@@ -19,7 +19,7 @@ class TeamListModal(discord.ui.Modal, title='ჯგუფის გუნდე�
         placeholder='1. Team Name <@530689295699148800> \n2. Team Name <@967529104435990608>'
     )
     footer = discord.ui.TextInput(
-        label='Footer', required=True, style=discord.TextStyle.paragraph, min_length=1, max_length=128,
+        label='Footer', required=False, style=discord.TextStyle.paragraph, min_length=1, max_length=128,
         placeholder=f'Match Day: {datetime.now().strftime("%B %d")} \nTime: {datetime.now().strftime("%H:%M")}'
     )
 
