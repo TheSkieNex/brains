@@ -15,12 +15,10 @@ class Information(commands.Cog):
     @app_commands.command(name='server', description='Server information')
     @app_commands.guild_only()
     async def server_info(self, interaction: discord.Interaction):
-        guild = self.bot.get_guild(self.bot.config.guild_id)
-
         online = []
         offline = []
 
-        for member in guild.members:
+        for member in interaction.guild.members:
             if str(member.status) in ('online', 'dnd'):
                 online.append(str(member))
             else:
@@ -28,28 +26,26 @@ class Information(commands.Cog):
 
         roles = []
 
-        for role in guild.roles:
+        for role in interaction.guild.roles:
             roles.append(str(role.mention))
 
         roles.reverse()
         roles.pop()
         
         embed = discord.Embed(color=self.bot.config.main_color)
-        embed.title = guild.name
-        if guild.icon is not None:
-            embed.set_thumbnail(url=guild.icon.url)
+        embed.title = interaction.guild.name
 
-        embed.description = f'Created: {format_dt(guild.created_at, style="R")}'
-        embed.add_field(name='Server ID', value=guild.id, inline=False)
-        embed.add_field(name='Server Owner', value=guild.owner.mention, inline=False)
-        embed.add_field(name=f'Roles - {len(guild.roles)}', value=' '.join(roles), inline=False)
-        embed.add_field(name=f'Members - {len(guild.members)}', value=(
+        embed.description = f'Created: {format_dt(interaction.guild.created_at, style="R")}'
+        embed.add_field(name='Server ID', value=interaction.guild.id, inline=False)
+        embed.add_field(name='Server Owner', value=interaction.guild.owner.mention, inline=False)
+        embed.add_field(name=f'Roles - {len(interaction.guild.roles)}', value=' '.join(roles), inline=False)
+        embed.add_field(name=f'Members - {len(interaction.guild.members)}', value=(
             f'<:green:1235625157389979700> {len(online)}   <:gray:1235625075672350731> {len(offline)}'
         ), inline=False)
-        embed.add_field(name=f'Channels - {len(guild.channels)}', value=(
-            f'Category: {len(guild.categories)}\n'
-            f'Text: {len(guild.text_channels)}\n'
-            f'Voice: {len(guild.voice_channels)}'
+        embed.add_field(name=f'Channels - {len(interaction.guild.channels)}', value=(
+            f'Category: {len(interaction.guild.categories)}\n'
+            f'Text: {len(interaction.guild.text_channels)}\n'
+            f'Voice: {len(interaction.guild.voice_channels)}'
         ), inline=False)
         embed.timestamp = datetime.now()
 
