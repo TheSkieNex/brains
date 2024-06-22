@@ -202,10 +202,10 @@ class ListCommands(commands.Cog):
             lines[
                 next(index for index, line in enumerate(lines) if '<@' in line)
                 :
-                max(index for index, line in enumerate(lines) if line.strip() and (line[0] == '>' or line[0].isdigit())) + 1
+                max(index for index, line in enumerate(lines) if line.strip() and line[0] == '>') + 1
             ]
         )
-        footer = '\n'.join(lines[max(index for index, line in enumerate(lines) if line.strip() and (line[0] == '>' or line[0].isdigit())) + 1:])
+        footer = '\n'.join(lines[max(index for index, line in enumerate(lines) if line.strip() and line[0] == '>' ) + 1:])
 
         modal = TeamListModal(header.strip(), team_list.strip(), footer.strip())
 
