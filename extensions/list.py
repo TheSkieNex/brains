@@ -16,7 +16,7 @@ class TeamListModal(discord.ui.Modal, title='ჯგუფის გუნდე�
     )
     team_list = discord.ui.TextInput(
         label='Team List', required=True, style=discord.TextStyle.long, min_length=1, max_length=2000,
-        placeholder='1. Team Name <@530689295699148800> \n2. Team Name <@967529104435990608>'
+        placeholder='> 1. Team Name <@530689295699148800> \n> 2. Team Name <@967529104435990608>'
     )
     footer = discord.ui.TextInput(
         label='Footer', required=False, style=discord.TextStyle.paragraph, min_length=0, max_length=128,
