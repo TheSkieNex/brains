@@ -229,7 +229,7 @@ class ListCommands(commands.Cog):
         await list_message.edit(content=formatted_text)
         await interaction.response.defer()
 
-    @app_commands.command(name='checkin', description='Send a check in embed')
+    @app_commands.command(name='check_in', description='Send a check in embed')
     @app_commands.guild_only()
     @app_commands.default_permissions(administrator=True)
     async def check_in(self, interaction: discord.Interaction):
