@@ -83,7 +83,7 @@ class GeneralCommands(commands.Cog):
             ids_in_message = re.findall(r'(?<!<@)\b\d+\b(?!>)', message.content)
 
             for id in ids_in_message:
-                if len(id) >= 6:
+                if len(id) >= 7:
                     players_ids.add(id)
 
         file_content = '\n'.join(players_ids)
