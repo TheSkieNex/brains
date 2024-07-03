@@ -92,6 +92,13 @@ class GeneralCommands(commands.Cog):
 
         await ctx.send(f'{len(players_ids)} players ids was saved.', file=file)
 
+    @commands.command()
+    @commands.is_owner()
+    async def guilds(self, ctx: commands.Context):
+        n_guilds = len(self.bot.guilds)
+
+        await ctx.send(str(n_guilds))
+
 
 async def setup(bot: Brains):
     await bot.add_cog(GeneralCommands(bot))
