@@ -386,12 +386,17 @@ class Ticket(commands.Cog):
     @ticket_system_group.command(name='delete', description='Delete a ticket system')
     async def delete_ticket_system(self, interaction: discord.Interaction): 
         exists = await self.bot.db.fetchone('SELECT id FROM ticket_systems WHERE guild_id = ?', interaction.guild.id)
-        query = 'DELETE FROM ticket_systems WHERE guild_id = ?'
-        await self.bot.db.execute(query, interaction.guild.id)
+        
+        if exists:
+            query = 'DELETE FROM ticket_systems WHERE guild_id = ?'
+            await self.bot.db.execute(query, interaction.guild.id)
 
-        await self.bot.db.execute('DELETE FROM ticket_system_messages WHERE guild_id = ?', interaction.guild.id)
+            await self.bot.db.execute('DELETE FROM ticket_system_messages WHERE guild_id = ?', interaction.guild.id)
 
-        await interaction.response.send_message('Ticket system in this server was successfully deleted.')
+            await interaction.response.send_message('Ticket system in this server was successfully deleted.')
+        else:
+            await interaction.response.send_message('There is no ticket system in this server.', ephemeral=True)
+
 
 async def setup(bot: Brains):
     await bot.add_cog(Ticket(bot))
