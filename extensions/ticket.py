@@ -386,7 +386,6 @@ class Ticket(commands.Cog):
     @ticket_system_group.command(name='delete', description='Delete a ticket system')
     async def delete_ticket_system(self, interaction: discord.Interaction): 
         exists = await self.bot.db.fetchone('SELECT id FROM ticket_systems WHERE guild_id = ?', interaction.guild.id)
-        print(exists)
         query = 'DELETE FROM ticket_systems WHERE guild_id = ?'
         await self.bot.db.execute(query, interaction.guild.id)
 
