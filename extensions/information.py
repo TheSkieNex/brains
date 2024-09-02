@@ -8,9 +8,145 @@ from utils.bot import Brains
 from datetime import datetime
 
 
+class HelpCommandsView(discord.ui.View):
+    def __init__(
+            self, 
+            *, 
+            data: list[discord.Embed.fields],
+            color: discord.Color,
+            timeout: float | None = 180
+    ):
+        self.data = data
+        self.color = color
+        self.k = 0
+        self.max_page = (len(self.data) // 3)
+        super().__init__(timeout=timeout)
+
+    async def create_embed(self, *, fields: list[discord.Embed.fields], footer_text: str):
+        embed = discord.Embed(color=self.color)
+        embed.title = 'Commands'
+        for field in fields:
+            embed.add_field(name=field['name'], value=field['value'], inline=False)
+
+        embed.set_footer(text=footer_text)
+
+        return embed
+
+    @discord.ui.button(emoji='⏮️', style=discord.ButtonStyle.blurple)
+    async def fast_rewind_back(self, interaction: discord.Interaction, button: discord.Button):
+        self.k = 0
+        embed = await self.create_embed(
+            fields=self.data[:3],
+            footer_text=f'Page 1/{self.max_page}'
+        )
+        
+        await interaction.response.defer()
+        await interaction.message.edit(embed=embed)
+    
+    @discord.ui.button(emoji='⏪', style=discord.ButtonStyle.blurple)
+    async def rewind_back(self, interaction: discord.Interaction, button: discord.Button):
+        if self.k > 0: self.k -= 1
+        data = self.data[3*self.k:(self.k+1)*3]
+        if data:
+            embed = await self.create_embed(
+                fields=data,
+                footer_text=f'Page {self.k+1}/{self.max_page}'
+            )
+            
+            await interaction.response.defer()
+            await interaction.message.edit(embed=embed)
+        else:
+            await interaction.response.defer()
+    
+    @discord.ui.button(emoji='⏩', style=discord.ButtonStyle.blurple)
+    async def rewind_forward(self, interaction: discord.Interaction, button: discord.Button):
+        max_k = len(self.data) // 3
+        if max_k*3 == len(self.data): max_k -= 1
+        
+        if self.k != max_k: self.k += 1
+        data = self.data[3*self.k:(self.k+1)*3]
+        if data:
+            embed = await self.create_embed(
+                fields=data,
+                footer_text=f'Page {self.k+1}/{self.max_page}'
+            )
+            
+            await interaction.response.defer()
+            await interaction.message.edit(embed=embed)
+        else:
+            await interaction.response.defer()
+    
+    @discord.ui.button(emoji='⏭️', style=discord.ButtonStyle.blurple)
+    async def fast_rewind_forward(self, interaction: discord.Interaction, button: discord.Button):
+        max_five_multiple = len(self.data) - (len(self.data) % 3) if (len(self.data) % 3) != 0 else len(self.data) - 3
+        max_k = len(self.data) // 3
+        if max_k*3 == len(self.data): max_k -= 1
+        self.k = max_k
+
+        embed = await self.create_embed(
+            fields=self.data[max_five_multiple:],
+            footer_text=f'Page {self.max_page}/{self.max_page}'
+        )
+
+        await interaction.response.defer()
+        await interaction.message.edit(embed=embed)
+
 class Information(commands.Cog):
     def __init__(self, bot: Brains):
         self.bot = bot
+
+
+    @commands.hybrid_command(name='help')
+    @commands.guild_only()
+    async def help(self, ctx: commands.Context):
+        embed = discord.Embed(color=self.bot.config.main_color)
+
+        embed.title = 'Commands'
+
+        embed_fields = [
+            {'name': 'Information', 'value': """
+                **/server** - shows server information
+                **/user** - shows user information
+            """},
+            {'name': 'Moderation', 'value': """
+                **/kick {target}** - kicks a user
+                **/ban {target}** - bans a user
+                **purge {limit}** - deletes number of messages in a channel 
+            """},
+            {'name': 'Tag', 'value': """
+                **get [name]** - returns saved tag
+                **all** - returns list of tags of the server
+                **create [name] [content]** - creates a tag in the server with specific name and it's content
+                **edit [name] {content}** - edits a tag. If content is empty discord modal will open with it's data
+                **remove [name]** - deletes a tag
+            """},
+            {'name': 'Ticket System', 'value': """
+                **/setup {category}** - setup ticket system, category where ticket channels will be created
+                **/system setup** - sends system message in the channel where ticket system was created
+                **/system edit {channel} {category}** - edits ticket system. Opens a discord modal. Channel and category are not required, if specified they will update accordingly
+                **/system delete** - deletes ticket system
+            """},
+            {'name': 'Team List', 'value': """
+                **/send {channel}** - sends a list in a channel. Opens a modal, put data as it is shown in the placeholders of input fields
+                **/edit** - edits team list message in a channel. Make sure that the message itself is the first message in the channel
+                **/check_in** - sends check in message in a channel. Make sure team list message and this message are in the same channel
+            """},
+            {'name': 'Other', 'value': """
+                **?steal [emoji]** - steals an emoji from other server and adds it to your server
+                **?give [role]** - adds the role to each mentioned user in a message. Make sure to reply to the message with this command in order to make it work
+                **?remove [role]** - removes the role from each mentioned user. Same tip as above
+            """},
+        ]
+
+        for field in embed_fields[:3]:
+            embed.add_field(name=field['name'], value=field['value'], inline=False)
+
+        page = (len(embed_fields) // 3) + 1 if len(embed_fields) % 3 != 0 else len(embed_fields) // 3
+        embed.set_footer(text=f'Page 1/{page}')
+
+        view = HelpCommandsView(data=embed_fields, color=self.bot.config.main_color, timeout=None)
+
+        await ctx.send(embed=embed, view=view)
 
     @app_commands.command(name='server', description='Server information')
     @app_commands.guild_only()
