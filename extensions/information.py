@@ -96,7 +96,7 @@ class Information(commands.Cog):
         self.bot = bot
 
 
-    @commands.hybrid_command(name='help')
+    @commands.hybrid_command(name='help', description='Help command')
     @commands.guild_only()
     async def help(self, ctx: commands.Context):
         embed = discord.Embed(color=self.bot.config.main_color)
