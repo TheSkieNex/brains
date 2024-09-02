@@ -25,6 +25,7 @@ class HelpCommandsView(discord.ui.View):
     async def create_embed(self, *, fields: list[discord.Embed.fields], footer_text: str):
         embed = discord.Embed(color=self.color)
         embed.title = 'Commands'
+        embed.description = 'Commands with `/` are only slash commands, with `?` are only prefix commands, without any of them works with both.'
         for field in fields:
             embed.add_field(name=field['name'], value=field['value'], inline=False)
 
@@ -102,6 +103,7 @@ class Information(commands.Cog):
         embed = discord.Embed(color=self.bot.config.main_color)
 
         embed.title = 'Commands'
+        embed.description = 'Commands with `/` are only slash commands, with `?` are only prefix commands, without any of them works with both.'
 
         embed_fields = [
             {'name': 'Information', 'value': """
