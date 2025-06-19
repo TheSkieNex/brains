@@ -1,4 +1,4 @@
-discord.py
-python-dotenv
-aiosqlite
-requests
+discord.py==2.5.2
+python-dotenv==1.1.0
+aiosqlite==0.21.0
+httpx==0.28.1

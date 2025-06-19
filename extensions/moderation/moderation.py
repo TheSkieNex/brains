@@ -55,9 +55,6 @@ class Moderation(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @app_commands.describe(limit='The amount of messages to delete')
-    async def purge(self, ctx: commands.Context, limit: int = None):
-        if not limit:
-            limit = 10
-
+    async def purge(self, ctx: commands.Context, limit: int = 10):
         await ctx.channel.purge(limit=limit)
         await ctx.send(f'{limit} messages were deleted', ephemeral=True, delete_after=.5)

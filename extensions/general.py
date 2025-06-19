@@ -2,7 +2,7 @@ import re
 import io
 
 import discord
-import requests
+import httpx
 
 from discord.ext import commands
 
@@ -18,7 +18,7 @@ class GeneralCommands(commands.Cog):
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def steal(self, ctx: commands.Context, emoji: discord.PartialEmoji):
-        response = requests.get(emoji.url)
+        response = await httpx.get(emoji.url)
         image_bytes = BytesIO(response.content)
 
         await ctx.guild.create_custom_emoji(name=emoji.name, image=image_bytes.read())
@@ -75,7 +75,9 @@ class GeneralCommands(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.is_owner()
-    async def get_players_ids(self, ctx: commands.Context, limit: str):
+    async def get_player_ids(self, ctx: commands.Context, limit: str = '1000'):
+        await ctx.send("Starting to get the player IDs")
+
         players_ids = set()
         messages = [message async for message in ctx.channel.history(limit=int(limit))]
 
