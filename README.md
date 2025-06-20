@@ -12,5 +12,3 @@ after everything is installed run the bot
 ```cmd
 python launcher.py
 ```
-
-You can add this bot to your server from [here](https://discord.com/oauth2/authorize?client_id=1052213572035412018&permissions=8&integration_type=0&scope=bot)
