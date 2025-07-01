@@ -46,13 +46,13 @@ class CheckInSelect(discord.ui.Select):
         ]
         self.response_type = response_type
 
-        super().__init__(placeholder='Select a team', options=options, min_values=1, max_values=1, custom_id='Brains:check_in_select')
+        super().__init__(placeholder='აირჩიეთ გუნდი', options=options, min_values=1, max_values=1, custom_id='Brains:check_in_select')
 
     async def callback(self, interaction: discord.Interaction):
         list_message = [message async for message in interaction.channel.history(limit=10)]
         list_content = list_message[len(list_message)-1].content
 
-        response_message = 'was rejected ❌' if self.response_type == 0 else 'was confirmed ✅'
+        response_message = 'უარყოფილია ❌' if self.response_type == 0 else 'დადასტურებულია ✅'
         format = '~~' if self.response_type == 0 else '__'
 
         if interaction.user.id in list_message[len(list_message)-1].raw_mentions:
@@ -84,11 +84,11 @@ class CheckInView(discord.ui.View):
         self.bot = bot
         super().__init__(timeout=None)
 
-    @discord.ui.button(label='Confirm', style=discord.ButtonStyle.green, custom_id='Brains:check_in_confirm')
+    @discord.ui.button(label='დადასტურება', style=discord.ButtonStyle.green, custom_id='Brains:check_in_confirm')
     async def accept_button(self, interaction: discord.Interaction, button: discord.Button):
         await self.execute_interaction(interaction, 1)
 
-    @discord.ui.button(label='Reject', style=discord.ButtonStyle.danger, custom_id='Brains:check_in_reject')
+    @discord.ui.button(label='უარყოფა', style=discord.ButtonStyle.danger, custom_id='Brains:check_in_reject')
     async def reject_button(self, interaction: discord.Interaction, button: discord.Button):
         await self.execute_interaction(interaction, 0)
 
@@ -96,8 +96,8 @@ class CheckInView(discord.ui.View):
         list_message = [message async for message in interaction.channel.history(limit=100)]
         list_content = list_message[len(list_message)-1].content
 
-        response_message = 'Rejected ❌' if type == 0 else 'Confirmed ✅'
-        response = 'already rejected' if type == 0 else 'already confirmed'
+        response_message = 'უარყოფილია ❌' if type == 0 else 'დადასტურებულია ✅'
+        response = 'უარყოფილია' if type == 0 else 'დადასტურებულია'
         format = '~~' if type == 0 else '__'
 
         if interaction.user.id in list_message[len(list_message)-1].raw_mentions:
@@ -143,11 +143,11 @@ class CheckInView(discord.ui.View):
                     view = discord.ui.View(timeout=None)
                     view.add_item(CheckInSelect(team_names, type))
 
-                    await interaction.response.send_message('Select a team from below', view=view, ephemeral=True)
+                    await interaction.response.send_message('აირჩიეთ გუნდი ქვემოთ', view=view, ephemeral=True)
                 else:
-                    await interaction.response.send_message(f'Your teams are {response}', ephemeral=True)
+                    await interaction.response.send_message(f'თქვენი ყველა გუნდი {response}', ephemeral=True)
         else:
-            await interaction.response.send_message('You are not tagged in the list', ephemeral=True)
+            await interaction.response.send_message('თქვენ არ ხართ მონიშვნილი სიაში', ephemeral=True)
 
 class ListCommands(commands.Cog):
     def __init__(self, bot: Brains):
@@ -236,12 +236,12 @@ class ListCommands(commands.Cog):
         try:
             embed = discord.Embed(color=self.bot.config.main_color)
             embed.description = (
-                '**Please confirm whether you are playing or not**'
+                '**გთხოვთ დაადასტუროთ თამაშობთ თუ არა**'
             )
 
             await interaction.response.send_message(embed=embed, view=CheckInView(self.bot))
         except:
-            await interaction.response.send_message('Something .', ephemeral=True)
+            await interaction.response.send_message('რაღაც დაფიქსირდა შეცდომა', ephemeral=True)
         
 
 async def setup(bot: Brains):
